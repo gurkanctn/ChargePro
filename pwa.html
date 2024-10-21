@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#00c6ff">
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" href="icon-192x192.png" sizes="192x192">
+    <link rel="icon" href="icon-512x512.png" sizes="512x512">
+    <title>Electric Car Charge Calculator</title>
+    <style>
+    /* General styling for body */
+    body {
+        font-family: 'Arial', sans-serif;
+        margin: 0;
+        padding: 0;
+        background: linear-gradient(135deg, #00c6ff, #0072ff);
+        color: white;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        text-align: center;
+        padding: 20px;
+    }
+
+    h1 {
+        font-size: 2.5rem;
+        margin-bottom: 20px;
+        color: #ffffff;
+    }
+
+    label {
+        font-size: 1.2rem;
+        margin: 10px 0;
+        color: #eaeaea;
+    }
+
+    input[type="number"] {
+        padding: 10px;
+        font-size: 1rem;
+        border-radius: 4px;
+        border: none;
+        margin-bottom: 10px;
+        width: 100%;
+        max-width: 300px;
+    }
+
+    button {
+        background-color: #008cbb;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        margin-top: 10px;
+        cursor: pointer;
+        font-size: 1.1rem;
+        border-radius: 5px;
+        transition: background-color 0.3s ease;
+        width: 100%;
+        max-width: 300px;
+    }
+
+    button:hover {
+        background-color: #005f8b;
+    }
+
+    /* Updated table styling */
+    table {
+        margin-top: 20px;
+        width: 100%;
+        border-collapse: collapse;
+        background-color: rgba(0, 0, 0, 0.1);
+        border-radius: 10px;
+        overflow-x: auto;
+    }
+
+    th, td {
+        border: 1px solid #0072ff;
+        padding: 10px;
+        color: white;
+        text-align: center;
+    }
+
+    th {
+        background-color: #0072ff;
+    }
+
+    td {
+        background-color: rgba(0, 0, 0, 0.3);
+    }
+
+    /* Adjust table column widths */
+    th, td {
+        width: 20%; /* Set each column to take up 20% of the table width */
+    }
+
+    .delete-button {
+        background-color: #d9534f;
+        color: white;
+        border: none;
+        padding: 5px;
+        cursor: pointer;
+        border-radius: 3px;
+    }
+
+    .delete-button:hover {
+        background-color: #c9302c;
+    }
+
+    /* Make the table scrollable on small screens */
+    table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+
+    /* For mobile responsiveness */
+    @media (max-width: 768px) {
+        h1 {
+            font-size: 2rem;
+        }
+
+        input[type="number"] {
+            width: 90%;
+            max-width: none;
+        }
+
+        button {
+            width: 90%;
+        }
+
+        table {
+            width: 100%;
+        }
+
+        .delete-button {
+            width: 100%;
+            margin: 5px 0;
+        }
+    }
+
+    /* Ensure button and text sizes are readable on very small screens */
+    @media (max-width: 480px) {
+        h1 {
+            font-size: 1.8rem;
+        }
+
+        input[type="number"] {
+            font-size: 0.9rem;
+        }
+
+        button {
+            font-size: 1rem;
+            padding: 12px 16px;
+        }
+    }
+</style>
+
+</head>
+
+<body>
+
+<h1>Electric Car Charge Calculator</h1>
+
+<div>
+    <label for="batteryCapacity">Battery Capacity (kWh):</label>
+    <input type="number" id="batteryCapacity" min="0" step="0.1" placeholder="Enter battery capacity" required>
+    <button onclick="saveBatteryCapacity()">Save Battery Capacity</button>
+</div>
+
+<div>
+    <label for="startCharge">Start-of-Charge (%):</label>
+    <input type="number" id="startCharge" min="0" max="100" placeholder="Enter starting charge" required>
+</div>
+
+<button onclick="addChargeRow()">Add Charge</button>
+<button onclick="startNewSession()">Start New Charge Session</button>
+
+<table>
+    <thead>
+        <tr>
+            <th>Charged Amount (kWh)</th>
+            <th>Current Charge (%)</th>
+        </tr>
+    </thead>
+    <tbody id="chargeTableBody"></tbody>
+</table>
+
+<div id="previousCharges">
+    <h2>Previous Charges</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Start Time</th>
+                <th>End Time</th>
+                <th>Start Charge (%)</th>
+                <th>End Charge (%)</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody id="previousChargesList"></tbody>
+    </table>
+</div>
+
+<script>
+    // Load saved battery capacity and previous charges when the page loads
+    window.onload = function() {
+        const savedCapacity = localStorage.getItem('batteryCapacity');
+        if (savedCapacity) {
+            document.getElementById('batteryCapacity').value = savedCapacity;
+        }
+        displayPreviousCharges();
+    };
+
+    // Save battery capacity in local storage
+    function saveBatteryCapacity() {
+        const batteryCapacity = document.getElementById('batteryCapacity').value;
+        if (batteryCapacity) {
+            localStorage.setItem('batteryCapacity', batteryCapacity);
+            alert("Battery capacity saved!");
+        } else {
+            alert("Please enter a valid battery capacity.");
+        }
+    }
+
+    let currentChargePercentage = 0;
+    let totalChargeAdded = 0;
+    let previousCharges = JSON.parse(localStorage.getItem('previousCharges')) || [];
+    let sessionStartCharge = 0;
+    let isSessionStarted = false;
+    let sessionStartTime = "";
+
+    // Helper function to format date and time (dd-mm-yy hh:mm)
+    function formatDateTime(date) {
+        const day = String(date.getDate()).padStart(2, '0');
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const year = String(date.getFullYear()).slice(-2);
+        const hours = String(date.getHours()).padStart(2, '0');
+        const minutes = String(date.getMinutes()).padStart(2, '0');
+        return `${day}-${month}-${year} ${hours}:${minutes}`;
+    }
+
+    // Function to add a new charge row
+    function addChargeRow() {
+        const batteryCapacity = parseFloat(localStorage.getItem('batteryCapacity'));
+        const startCharge = parseFloat(document.getElementById('startCharge').value);
+
+        if (!batteryCapacity || batteryCapacity <= 0) {
+            alert("Please save a valid battery capacity before proceeding.");
+            return;
+        }
+
+        if (!startCharge && startCharge !== 0) {
+            alert("Please enter the start-of-charge percentage.");
+            return;
+        }
+
+        if (!isSessionStarted) {
+            // Start the session and set the initial start charge percentage and time
+            sessionStartCharge = startCharge;
+            currentChargePercentage = startCharge;
+            sessionStartTime = formatDateTime(new Date());
+            isSessionStarted = true;
+        }
+
+        const chargedAmount = parseFloat(prompt("Enter the total charge added (in kWh):"));
+        if (!chargedAmount || chargedAmount < 0) {
+            alert("Please enter a valid charged amount.");
+            return;
+        }
+
+        // Update total charge added (use entered total, do not sum)
+        totalChargeAdded = chargedAmount;
+
+        // Calculate the new charge percentage based on total kWh charged since session start
+        const chargeAddedPercentage = (totalChargeAdded / batteryCapacity) * 100;
+        currentChargePercentage = Math.min(100, (sessionStartCharge + chargeAddedPercentage).toFixed(2));
+
+        // Add a new row to the table
+        const tableBody = document.getElementById('chargeTableBody');
+        const newRow = document.createElement('tr');
+
+        const chargeAmountCell = document.createElement('td');
+        chargeAmountCell.innerText = chargedAmount.toFixed(2);
+        newRow.appendChild(chargeAmountCell);
+
+        const chargePercentCell = document.createElement('td');
+        chargePercentCell.innerText = currentChargePercentage + "%";
+        newRow.appendChild(chargePercentCell);
+
+        tableBody.appendChild(newRow);
+    }
+
+    // Start a new charge session and save the results
+    function startNewSession() {
+        if (isSessionStarted) {
+            const sessionEndCharge = currentChargePercentage;
+            const sessionEndTime = formatDateTime(new Date());
+            const newSession = {
+                startTime: sessionStartTime,
+                endTime: sessionEndTime,
+                startCharge: sessionStartCharge,
+                endCharge: sessionEndCharge
+            };
+
+            // Save session log
+            previousCharges.push(newSession);
+            localStorage.setItem('previousCharges', JSON.stringify(previousCharges));
+
+            // Reset the charge table for the next session
+            document.getElementById('chargeTableBody').innerHTML = '';
+            sessionStartCharge = 0;
+            currentChargePercentage = 0;
+            isSessionStarted = false;
+
+            alert("Charge session saved!");
+            displayPreviousCharges();
+        } else {
+            alert("Please start a charge session first.");
+        }
+    }
+
+    // Display all previous charge sessions in the table
+    function displayPreviousCharges() {
+        const previousChargesList = document.getElementById('previousChargesList');
+        previousChargesList.innerHTML = '';
+
+        previousCharges.forEach((session, index) => {
+            const row = document.createElement('tr');
+
+            const startTimeCell = document.createElement('td');
+            startTimeCell.innerText = session.startTime;
+            row.appendChild(startTimeCell);
+
+            const endTimeCell = document.createElement('td');
+            endTimeCell.innerText = session.endTime;
+            row.appendChild(endTimeCell);
+
+            const startChargeCell = document.createElement('td');
+            startChargeCell.innerText = session.startCharge + "%";
+            row.appendChild(startChargeCell);
+
+            const endChargeCell = document.createElement('td');
+            endChargeCell.innerText = session.endCharge + "%";
+            row.appendChild(endChargeCell);
+
+            const deleteButtonCell = document.createElement('td');
+            const deleteButton = document.createElement('button');
+            deleteButton.innerText = 'Delete';
+            deleteButton.classList.add('delete-button');
+            deleteButton.onclick = () => deleteSession(index);
+            deleteButtonCell.appendChild(deleteButton);
+            row.appendChild(deleteButtonCell);
+
+            previousChargesList.appendChild(row);
+        });
+    }
+
+    // Function to delete a session log
+    function deleteSession(index) {
+        previousCharges.splice(index, 1);
+        localStorage.setItem('previousCharges', JSON.stringify(previousCharges));
+        displayPreviousCharges();
+    }
+</script>
+
+</body>
+</html>
