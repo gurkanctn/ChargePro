@@ -1,7 +1,7 @@
-const cacheName = 'charge-calculator-cache-v1';
+const cacheName = 'charge-pro-cache-v1';
 const assetsToCache = [
   './',
-  './index.html',
+  './ChargePro.html',
   './manifest.json',
   './icon-192x192.png',
   './icon-512x512.png',

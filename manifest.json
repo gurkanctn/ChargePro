@@ -1,7 +1,7 @@
 {
-  "name": "Electric Car Charge Calculator",
-  "short_name": "ChargeCalc",
-  "description": "Helps calculate electric car charge sessions and history.",
+  "name": "Charge Pro",
+  "short_name": "Charge Pro",
+  "description": "Logs car charge sessions and calculates AC Charging status.",
   "start_url": "./",
   "display": "standalone",
   "background_color": "#ffffff",
