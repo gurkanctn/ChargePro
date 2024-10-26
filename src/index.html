@@ -211,6 +211,23 @@
         if (savedCapacity) {
             document.getElementById('batteryCapacity').value = savedCapacity;
         }
+        const savedCurrentSession = localStorage.getItem('currentSession');
+        if (savedCurrentSession) {
+            const sessionData = JSON.parse(savedCurrentSession);
+            sessionStartCharge = sessionData.startCharge;
+            currentChargePercentage = sessionData.currentChargePercentage;
+            sessionStartTime = sessionData.startTime;
+            isSessionStarted = true;
+            totalChargeAdded = sessionData.totalChargeAdded;
+
+            // Load current session data into table
+            const tableBody = document.getElementById('chargeTableBody');
+            sessionData.charges.forEach((charge) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `<td>${charge.chargedAmount.toFixed(2)}</td><td>${charge.chargePercentage}%</td>`;
+                tableBody.appendChild(row);
+            });
+        }
         displayPreviousCharges();
     };
 
@@ -291,8 +308,24 @@
         newRow.appendChild(chargePercentCell);
 
         tableBody.appendChild(newRow);
-    }
+        saveCurrentSession();  // Save session progress in local storage
 
+    }
+    function saveCurrentSession() {
+        const charges = Array.from(document.getElementById('chargeTableBody').rows).map(row => ({
+            chargedAmount: parseFloat(row.cells[0].textContent),
+            chargePercentage: parseFloat(row.cells[1].textContent)
+        }));
+
+        const currentSession = {
+            startCharge: sessionStartCharge,
+            currentChargePercentage,
+            startTime: sessionStartTime,
+            totalChargeAdded,
+            charges
+        };
+        localStorage.setItem('currentSession', JSON.stringify(currentSession));
+    }
     // Start a new charge session and save the results
     function startNewSession() {
         if (isSessionStarted) {
