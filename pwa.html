@@ -7,7 +7,7 @@
     <link rel="manifest" href="manifest.json">
     <link rel="icon" href="icon-192x192.png" sizes="192x192">
     <link rel="icon" href="icon-512x512.png" sizes="512x512">
-    <title>Electric Car Charge Calculator</title>
+    <title>Charge Pro</title>
     <style>
     /* General styling for body */
     body {
@@ -161,22 +161,23 @@
 
 <body>
 
-<h1>Electric Car Charge Calculator</h1>
+<h1>Charge Pro</h1>
 
 <div>
     <label for="batteryCapacity">Battery Capacity (kWh):</label>
     <input type="number" id="batteryCapacity" min="0" step="0.1" placeholder="Enter battery capacity" required>
     <button onclick="saveBatteryCapacity()">Save Battery Capacity</button>
 </div>
-
+<br>
 <div>
     <label for="startCharge">Start-of-Charge (%):</label>
     <input type="number" id="startCharge" min="0" max="100" placeholder="Enter starting charge" required>
 </div>
 
 <button onclick="addChargeRow()">Add Charge</button>
-<button onclick="startNewSession()">Start New Charge Session</button>
-
+<div>
+    <label for="chargeSession">Active Charge Session:</label>
+</div>
 <table>
     <thead>
         <tr>
@@ -186,7 +187,7 @@
     </thead>
     <tbody id="chargeTableBody"></tbody>
 </table>
-
+<button onclick="startNewSession()">Save Charge Session</button>
 <div id="previousCharges">
     <h2>Previous Charges</h2>
     <table>
