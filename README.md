@@ -6,14 +6,14 @@ Several charging service providers allow you to view their service history. Char
 
 Here's the draft interface:
 
-![image](https://github.com/user-attachments/assets/aaf7aff8-d6e1-43c8-8a5c-1363f7d406e6)
+![image](https://github.com/user-attachments/assets/577c7e72-1287-4517-a327-0b59a5872366)
 
-And here's the description as suggested by **Gemini**:
+And here's the description (as suggested by **Gemini**):
 
-# Charge Pro 
+# Charge Pro
 Tired of juggling multiple charging service provider apps? Charge Pro is here to simplify your EV charging experience.
 
-With Charge Pro, you can effortlessly track and manage all your EV charge sessions in one centralized location. No more switching between different apps or websites to view your charging history.
+With Charge Pro, you can effortlessly **track and manage** all your EV charge sessions in one centralized location. No more switching between different apps or websites to view your charging history.
 
 Key Features:
 
