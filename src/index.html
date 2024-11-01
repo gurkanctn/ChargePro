@@ -22,7 +22,6 @@
         justify-content: center;
         min-height: 100vh;
         text-align: center;
-        padding: 20px;
     }
 
     h1 {
@@ -50,7 +49,7 @@
     }
 
     button {
-        background-color: #008cbb;
+        background-color: #dd2222;
         color: white;
         border: none;
         padding: 10px 20px;
@@ -86,6 +85,8 @@
 
     th {
         background-color: #0072ff;
+        white-space: normal; /* Allow text wrapping */
+        word-wrap: break-word; /* Break long words */
     }
 
     td {
@@ -95,6 +96,8 @@
     /* Adjust table column widths */
     th, td {
         width: 20%; /* Set each column to take up 20% of the table width */
+        word-wrap: break-word;
+        overflow-wrap: break-word;
     }
 
     .delete-button {
@@ -358,7 +361,7 @@
 
             const deleteButtonCell = document.createElement('td');
             const deleteButton = document.createElement('button');
-            deleteButton.innerText = 'Delete';
+            deleteButton.innerText = 'X';
             deleteButton.onclick = () => deleteSession(index);
             deleteButtonCell.appendChild(deleteButton);
             row.appendChild(deleteButtonCell);
