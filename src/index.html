@@ -185,6 +185,7 @@
     <thead>
         <tr>
             <th>Charged Amount (kWh)</th>
+            <th>Calibrated Charge (kWh)</th>
             <th>Current Charge (%)</th>
         </tr>
     </thead>
@@ -208,33 +209,11 @@
 </div>
 
 <script>
-    // Load saved battery capacity and previous charges when the page loads
     window.onload = function() {
-        const savedCapacity = localStorage.getItem('batteryCapacity');
-        if (savedCapacity) {
-            document.getElementById('batteryCapacity').value = savedCapacity;
-        }
-        const savedCurrentSession = localStorage.getItem('currentSession');
-        if (savedCurrentSession) {
-            const sessionData = JSON.parse(savedCurrentSession);
-            sessionStartCharge = sessionData.startCharge;
-            currentChargePercentage = sessionData.currentChargePercentage;
-            sessionStartTime = sessionData.startTime;
-            isSessionStarted = true;
-            totalChargeAdded = sessionData.totalChargeAdded;
-
-            // Load current session data into table
-            const tableBody = document.getElementById('chargeTableBody');
-            sessionData.charges.forEach((charge) => {
-                const row = document.createElement('tr');
-                row.innerHTML = `<td>${charge.chargedAmount.toFixed(2)}</td><td>${charge.chargePercentage}%</td>`;
-                tableBody.appendChild(row);
-            });
-        }
-        displayPreviousCharges();
+        loadBatteryCapacity();
+        loadPreviousCharges();
     };
 
-    // Save battery capacity in local storage
     function saveBatteryCapacity() {
         const batteryCapacity = document.getElementById('batteryCapacity').value;
         if (batteryCapacity) {
@@ -247,12 +226,27 @@
 
     let currentChargePercentage = 0;
     let totalChargeAdded = 0;
-    let previousCharges = JSON.parse(localStorage.getItem('previousCharges')) || [];
+    let previousCharges = [];
     let sessionStartCharge = 0;
     let isSessionStarted = false;
     let sessionStartTime = "";
+    const calibrationFactor = 50 / 58;
 
-    // Helper function to format date and time (dd-mm-yy hh:mm)
+    function loadBatteryCapacity() {
+        const savedCapacity = localStorage.getItem('batteryCapacity');
+        if (savedCapacity) {
+            document.getElementById('batteryCapacity').value = savedCapacity;
+        }
+    }
+
+    function loadPreviousCharges() {
+        const savedCharges = localStorage.getItem('previousCharges');
+        if (savedCharges) {
+            previousCharges = JSON.parse(savedCharges);
+            displayPreviousCharges();
+        }
+    }
+
     function formatDateTime(date) {
         const day = String(date.getDate()).padStart(2, '0');
         const month = String(date.getMonth() + 1).padStart(2, '0');
@@ -262,7 +256,6 @@
         return `${day}-${month}-${year} ${hours}:${minutes}`;
     }
 
-    // Function to add a new charge row
     function addChargeRow() {
         const batteryCapacity = parseFloat(localStorage.getItem('batteryCapacity'));
         const startCharge = parseFloat(document.getElementById('startCharge').value);
@@ -278,7 +271,6 @@
         }
 
         if (!isSessionStarted) {
-            // Start the session and set the initial start charge percentage and time
             sessionStartCharge = startCharge;
             currentChargePercentage = startCharge;
             sessionStartTime = formatDateTime(new Date());
@@ -291,45 +283,30 @@
             return;
         }
 
-        // Update total charge added (use entered total, do not sum)
-        totalChargeAdded = chargedAmount;
+        const calibratedChargedAmount = chargedAmount * calibrationFactor;
+        totalChargeAdded = calibratedChargedAmount;
 
-        // Calculate the new charge percentage based on total kWh charged since session start
         const chargeAddedPercentage = (totalChargeAdded / batteryCapacity) * 100;
         currentChargePercentage = Math.min(100, (sessionStartCharge + chargeAddedPercentage).toFixed(2));
 
-        // Add a new row to the table
         const tableBody = document.getElementById('chargeTableBody');
         const newRow = document.createElement('tr');
 
-        const chargeAmountCell = document.createElement('td');
-        chargeAmountCell.innerText = chargedAmount.toFixed(2);
-        newRow.appendChild(chargeAmountCell);
+        const userChargeCell = document.createElement('td');
+        userChargeCell.innerText = chargedAmount.toFixed(2);
+        newRow.appendChild(userChargeCell);
+
+        const calibratedChargeCell = document.createElement('td');
+        calibratedChargeCell.innerText = calibratedChargedAmount.toFixed(2);
+        newRow.appendChild(calibratedChargeCell);
 
         const chargePercentCell = document.createElement('td');
         chargePercentCell.innerText = currentChargePercentage + "%";
         newRow.appendChild(chargePercentCell);
 
         tableBody.appendChild(newRow);
-        saveCurrentSession();  // Save session progress in local storage
-
     }
-    function saveCurrentSession() {
-        const charges = Array.from(document.getElementById('chargeTableBody').rows).map(row => ({
-            chargedAmount: parseFloat(row.cells[0].textContent),
-            chargePercentage: parseFloat(row.cells[1].textContent)
-        }));
 
-        const currentSession = {
-            startCharge: sessionStartCharge,
-            currentChargePercentage,
-            startTime: sessionStartTime,
-            totalChargeAdded,
-            charges
-        };
-        localStorage.setItem('currentSession', JSON.stringify(currentSession));
-    }
-    // Start a new charge session and save the results
     function startNewSession() {
         if (isSessionStarted) {
             const sessionEndCharge = currentChargePercentage;
@@ -341,11 +318,9 @@
                 endCharge: sessionEndCharge
             };
 
-            // Save session log
             previousCharges.push(newSession);
             localStorage.setItem('previousCharges', JSON.stringify(previousCharges));
 
-            // Reset the charge table for the next session
             document.getElementById('chargeTableBody').innerHTML = '';
             sessionStartCharge = 0;
             currentChargePercentage = 0;
@@ -358,7 +333,6 @@
         }
     }
 
-    // Display all previous charge sessions in the table
     function displayPreviousCharges() {
         const previousChargesList = document.getElementById('previousChargesList');
         previousChargesList.innerHTML = '';
@@ -385,7 +359,6 @@
             const deleteButtonCell = document.createElement('td');
             const deleteButton = document.createElement('button');
             deleteButton.innerText = 'Delete';
-            deleteButton.classList.add('delete-button');
             deleteButton.onclick = () => deleteSession(index);
             deleteButtonCell.appendChild(deleteButton);
             row.appendChild(deleteButtonCell);
@@ -394,7 +367,6 @@
         });
     }
 
-    // Function to delete a session log
     function deleteSession(index) {
         previousCharges.splice(index, 1);
         localStorage.setItem('previousCharges', JSON.stringify(previousCharges));
