@@ -8,7 +8,7 @@ Several charging service providers allow you to view their service history. Char
 
 Here's the draft interface:
 
-![image](https://github.com/user-attachments/assets/536b0650-42ea-4c5d-aad0-c96a884e2db9)
+![image](https://github.com/user-attachments/assets/e3766d0d-a237-435e-9f36-be5cd3115b14)
 
 And here's the description (as suggested by **Gemini**):
 
