@@ -4,7 +4,7 @@ Charge Pro helps keep track of your EV Charge sessions.
 
 | [Try it here](https://gurkanctn.github.io/ChargePro/src) | https://gurkanctn.github.io/ChargePro/src
 
-Several charging service providers allow you to view their service history. Charge Pro allows seeing logs of your charges at one convenient place.
+Several charging service providers allow you to view "only their" service history. Charge Pro allows seeing logs of ALL your charges at one convenient place, whether at home, or at paid charge stations.
 
 Here's the draft interface:
 
