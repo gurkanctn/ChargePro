@@ -3,317 +3,952 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#00c6ff">
+    <meta name="theme-color" content="#2563eb">
     <link rel="manifest" href="manifest.json">
     <link rel="icon" href="icon-192x192.png" sizes="192x192">
     <link rel="icon" href="icon-512x512.png" sizes="512x512">
-    <title>Charge Pro</title>
+    <title>Charge Pro - Smart EV Charging</title>
     <style>
-    /* General styling for body */
-    body {
-        font-family: 'Arial', sans-serif;
-        margin: 0;
-        padding: 0;
-        background: linear-gradient(135deg, #00c6ff, #0072ff);
-        color: white;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        min-height: 100vh;
-        text-align: center;
-    }
-
-    h1 {
-        font-family: 'Noto', sans-serif;
-        font-size: 2.5rem;
-        color: purple;
-        margin-bottom: 20px;
-        color: #ffffff;
-    }
-
-    label {
-        font-size: 1.2rem;
-        margin: 10px 0;
-        color: #eaeaea;
-    }
-
-    input[type="number"] {
-        padding: 10px;
-        font-size: 1rem;
-        border-radius: 4px;
-        border: none;
-        margin-bottom: 10px;
-        width: 100%;
-        max-width: 300px;
-    }
-
-    button {
-        background-color: #dd2222;
-        color: white;
-        border: none;
-        padding: 10px 20px;
-        margin-top: 10px;
-        cursor: pointer;
-        font-size: 1.1rem;
-        border-radius: 5px;
-        transition: background-color 0.3s ease;
-        width: 100%;
-        max-width: 300px;
-    }
-
-    button:hover {
-        background-color: #005f8b;
-    }
-
-    /* Updated table styling */
-    table {
-        margin-top: 20px;
-        width: 100%;
-        border-collapse: collapse;
-        background-color: rgba(0, 0, 0, 0.1);
-        border-radius: 10px;
-        overflow-x: auto;
-    }
-
-    th, td {
-        border: 1px solid #0072ff;
-        padding: 10px;
-        color: white;
-        text-align: center;
-    }
-
-    th {
-        background-color: #0072ff;
-        white-space: normal; /* Allow text wrapping */
-        word-wrap: break-word; /* Break long words */
-    }
-
-    td {
-        background-color: rgba(0, 0, 0, 0.3);
-    }
-
-    /* Adjust table column widths */
-    th, td {
-        width: 20%; /* Set each column to take up 20% of the table width */
-        word-wrap: break-word;
-        overflow-wrap: break-word;
-    }
-
-    .delete-button {
-        background-color: #d9534f;
-        color: white;
-        border: none;
-        padding: 5px;
-        cursor: pointer;
-        border-radius: 3px;
-    }
-
-    .delete-button:hover {
-        background-color: #c9302c;
-    }
-
-    /* Make the table scrollable on small screens */
-    table {
-        display: block;
-        overflow-x: auto;
-        white-space: nowrap;
-    }
-
-    /* For mobile responsiveness */
-    @media (max-width: 768px) {
-        h1 {
-            font-size: 2rem;
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --secondary: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --dark: #1f2937;
+            --light: #f8fafc;
+            --gray: #6b7280;
         }
 
-        input[type="number"] {
-            width: 90%;
-            max-width: none;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
-        button {
-            width: 90%;
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: var(--dark);
+            min-height: 100vh;
+            padding: 20px;
         }
 
-        table {
+        .app-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* Header Styles */
+        .app-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: white;
+        }
+
+        .app-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .app-logo {
+            height: 50px;
+            width: 50px;
+            border-radius: 10px;
+        }
+
+        .vehicle-info {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        /* Card Styles */
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             width: 100%;
         }
 
-        .delete-button {
+        /* Button Styles */
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+        }
+
+        .btn-success {
+            background: var(--secondary);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #0da271;
+            transform: translateY(-2px);
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #dc2626;
+            transform: translateY(-2px);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+        }
+
+        .btn-outline:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* Form Styles */
+        .form-group {
+            margin-bottom: 1rem;
+            text-align: left;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--dark);
+        }
+
+        .form-input {
             width: 100%;
-            margin: 5px 0;
-        }
-    }
-
-    /* Ensure button and text sizes are readable on very small screens */
-    @media (max-width: 480px) {
-        h1 {
-            font-size: 1.8rem;
-        }
-
-        input[type="number"] {
-            font-size: 0.9rem;
-        }
-
-        button {
+            padding: 12px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
             font-size: 1rem;
-            padding: 12px 16px;
+            transition: border-color 0.3s ease;
         }
-    }
-</style>
 
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        /* Tab Styles */
+        .tabs {
+            display: flex;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 4px;
+            margin-bottom: 1rem;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 0.75rem;
+            border: none;
+            background: transparent;
+            color: rgba(255, 255, 255, 0.7);
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .tab-btn.active {
+            background: white;
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .tab-pane {
+            display: none;
+        }
+
+        .tab-pane.active {
+            display: block;
+        }
+
+        /* Status Indicator */
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            margin-bottom: 1rem;
+            width: fit-content;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--gray);
+        }
+
+        .status-active .status-dot {
+            background: var(--secondary);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            margin: 1.5rem 0;
+        }
+
+        .progress-labels {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+            color: var(--dark);
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e5e7eb;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--secondary), var(--primary));
+            transition: width 0.5s ease;
+            width: 0%;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 1rem;
+            border-radius: 8px;
+            text-align: center;
+            color: white;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            opacity: 0.8;
+        }
+
+        /* Table Styles */
+        .table-container {
+            overflow-x: auto;
+            border-radius: 8px;
+            background: white;
+            margin-top: 1rem;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .data-table th {
+            background: var(--primary);
+            color: white;
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        .data-table td {
+            padding: 1rem;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .data-table tr:hover {
+            background: #f8fafc;
+        }
+
+        /* Toast Notifications */
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+
+        .toast {
+            background: white;
+            padding: 1rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            margin-bottom: 0.5rem;
+            animation: slideIn 0.3s ease;
+            border-left: 4px solid var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            max-width: 300px;
+        }
+
+        .toast.success {
+            border-left-color: var(--secondary);
+        }
+
+        .toast.error {
+            border-left-color: var(--danger);
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--gray);
+        }
+
+        /* Floating Action Button */
+        .floating-actions {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 100;
+        }
+
+        .fab {
+            padding: 16px;
+            border-radius: 50%;
+            border: none;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .fab-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .fab-primary:hover {
+            transform: scale(1.1);
+        }
+
+        /* Action Buttons Container */
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 1rem;
+            flex-wrap: wrap;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+            }
+            
+            .tabs {
+                flex-direction: column;
+            }
+            
+            .app-header h1 {
+                font-size: 2rem;
+            }
+        }
+
+        /* Loading Spinner */
+        .spinner {
+            width: 20px;
+            height: 20px;
+            border: 2px solid transparent;
+            border-top: 2px solid var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .loading {
+            opacity: 0.6;
+            pointer-events: none;
+        }
+        
+        /* Install Prompt */
+        .install-prompt {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background: white;
+            border-radius: 8px;
+            padding: 1rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            display: none;
+            z-index: 1000;
+            max-width: 300px;
+        }
+        
+        .install-prompt button {
+            margin-top: 0.5rem;
+        }
+    </style>
 </head>
-
 <body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="app-header">
+            <h1>
+                <img src="icon-192x192.png" alt="Charge Pro" class="app-logo">
+                Charge Pro
+            </h1>
+            <div class="vehicle-info" id="vehicleNameDisplay">No Vehicle Set</div>
+        </header>
 
-<img src="./icon-192x192.png">
-<h1>Charge Pro</h1>
+        <!-- Stats Overview -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-value" id="totalSessions">0</div>
+                <div class="stat-label">Total Sessions</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="avgChargeAdded">0 kWh</div>
+                <div class="stat-label">Avg. Charge</div>
+            </div>
+        </div>
 
-<div>
-    <label for="batteryCapacity">Battery Capacity (kWh):</label>
-    <input type="number" id="batteryCapacity" min="0" step="0.1" placeholder="Enter battery capacity" required>
-    <button onclick="saveBatteryCapacity()">Save Battery Capacity</button>
-</div>
-<br>
-<div>
-    <label for="startCharge">Start-of-Charge (%):</label>
-    <input type="number" id="startCharge" min="0" max="100" placeholder="Enter starting charge" required>
-</div>
+        <!-- Tab Navigation -->
+        <div class="tabs">
+            <button class="tab-btn active" data-tab="current">Current Session</button>
+            <button class="tab-btn" data-tab="history">History</button>
+            <button class="tab-btn" data-tab="settings">Settings</button>
+        </div>
 
-<button onclick="addChargeRow()">Add Charge</button>
-<div>
-    <label for="chargeSession">Active Charge Session:</label>
-</div>
-<table>
-    <thead>
-        <tr>
-            <th>Charged Amount (kWh)</th>
-            <th>Calibrated Charge (kWh)</th>
-            <th>Current Charge (%)</th>
-        </tr>
-    </thead>
-    <tbody id="chargeTableBody"></tbody>
-</table>
-<button onclick="startNewSession()">Save Charge Session</button>
-<div id="previousCharges">
-    <h2>Previous Charges</h2>
-    <table>
-        <thead>
-            <tr>
-                <th>Start Time</th>
-                <th>End Time</th>
-                <th>Start Charge (%)</th>
-                <th>End Charge (%)</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody id="previousChargesList"></tbody>
-    </table>
-</div>
+        <!-- Tab Content -->
+        <div class="tab-content">
+            <!-- Current Session Tab -->
+            <div id="current-tab" class="tab-pane active">
+                <div class="card">
+                    <div class="status-indicator" id="sessionStatus">
+                        <div class="status-dot"></div>
+                        <span class="status-text">No Active Session</span>
+                    </div>
 
-<script>
-    window.onload = function() {
-        loadBatteryCapacity();
-        loadPreviousCharges();
-    };
+                    <!-- Progress Bar -->
+                    <div class="progress-container">
+                        <div class="progress-labels">
+                            <span>Start: <strong id="startChargeDisplay">0%</strong></span>
+                            <span>Current: <strong id="currentChargeDisplay">0%</strong></span>
+                            <span>Target: 100%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progressFill"></div>
+                        </div>
+                    </div>
 
-    function saveBatteryCapacity() {
-        const batteryCapacity = document.getElementById('batteryCapacity').value;
-        if (batteryCapacity) {
+                    <!-- Action Buttons -->
+                    <div class="action-buttons">
+                        <button class="btn btn-primary" id="newSessionButton">
+                            <span>⚡</span> New Session
+                        </button>
+                        <button class="btn btn-success" id="addChargeButton" style="display: none;">
+                            <span>➕</span> Add Charge
+                        </button>
+                        <button class="btn btn-danger" id="finishSessionButton" style="display: none;">
+                            <span>✓</span> Finish Session
+                        </button>
+                    </div>
+
+                    <!-- Charge Table -->
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Total Charged (kWh)</th>
+                                    <th>Calibrated Charge (kWh)</th>
+                                    <th>Current Charge (%)</th>
+                                </tr>
+                            </thead>
+                            <tbody id="chargeTableBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- History Tab -->
+            <div id="history-tab" class="tab-pane">
+                <div class="card">
+                    <h2>Previous Charges</h2>
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Start Time</th>
+                                    <th>End Time</th>
+                                    <th>Start Charge (%)</th>
+                                    <th>End Charge (%)</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="previousChargesList"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Settings Tab -->
+            <div id="settings-tab" class="tab-pane">
+                <div class="card">
+                    <h2>Vehicle Settings</h2>
+                    <div class="form-group">
+                        <label class="form-label" for="vehicleName">Vehicle Name:</label>
+                        <input type="text" id="vehicleName" class="form-input" placeholder="Enter vehicle name">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="vehicleBatteryCapacity">Battery Capacity (kWh):</label>
+                        <input type="number" id="vehicleBatteryCapacity" min="0" step="0.1" class="form-input" placeholder="Enter battery capacity" inputmode="decimal">
+                    </div>
+                    <button class="btn btn-primary" id="saveVehicleButton">Save Vehicle</button>
+                </div>
+
+                <div class="card">
+                    <h2>Feedback</h2>
+                    <p>We value your feedback to improve Charge Pro.</p>
+                    <button class="btn btn-outline" id="feedbackButton">Provide Feedback</button>
+                </div>
+                
+                <div class="card">
+                    <h2>App Info</h2>
+                    <p>Charge Pro v1.0.0</p>
+                    <p>PWA: <span id="pwaStatus">Checking...</span></p>
+                    <button class="btn btn-outline" id="installButton" style="display: none;">Install App</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Floating Action Button -->
+        <div class="floating-actions">
+            <button class="fab fab-primary" id="floatingSessionButton" title="New Session">
+                <span>⚡</span>
+            </button>
+        </div>
+
+        <!-- Install Prompt -->
+        <div class="install-prompt" id="installPrompt">
+            <p>Install Charge Pro for a better experience?</p>
+            <button class="btn btn-primary" id="installPromptButton">Install</button>
+            <button class="btn btn-outline" id="dismissInstallButton">Not Now</button>
+        </div>
+
+        <!-- Toast Container -->
+        <div id="toastContainer" class="toast-container"></div>
+
+        <!-- Added Charge Modal -->
+        <div id="addedChargeModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Enter Total Charged (kWh)</h3>
+                    <button class="modal-close" id="closeAddedChargeModal">&times;</button>
+                </div>
+                <div class="form-group">
+                    <input type="number" id="addedChargeInput" min="0" step="0.1" class="form-input" placeholder="Enter total charged since session start" inputmode="decimal">
+                </div>
+                <div class="action-buttons">
+                    <button class="btn btn-primary" id="submitAddedCharge">Submit</button>
+                    <button class="btn btn-outline" id="cancelAddedCharge">Cancel</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Feedback Modal -->
+        <div id="feedbackModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Send Feedback</h3>
+                    <button class="modal-close" id="closeFeedbackModal">&times;</button>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="feedbackInput">Your Feedback:</label>
+                    <textarea id="feedbackInput" class="form-input" placeholder="Please share your feedback, suggestions, or report any issues..." rows="5"></textarea>
+                </div>
+                <div class="action-buttons">
+                    <button class="btn btn-primary" id="submitFeedback">Submit Feedback</button>
+                    <button class="btn btn-outline" id="cancelFeedback">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global variables
+        let currentChargePercentage = 0;
+        let totalChargeAdded = 0;
+        let previousCharges = [];
+        let sessionStartCharge = 0;
+        let isSessionStarted = false;
+        let sessionStartTime = "";
+        const calibrationFactor = 50 / 58;
+        let deferredPrompt;
+
+        // Tab switching function - moved to global scope
+        function switchTab(tabName) {
+            // Hide all tab panes
+            document.querySelectorAll('.tab-pane').forEach(pane => {
+                pane.classList.remove('active');
+            });
+            
+            // Remove active class from all tab buttons
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Show the selected tab pane
+            document.getElementById(`${tabName}-tab`).classList.add('active');
+            
+            // Activate the clicked tab button
+            event.target.classList.add('active');
+        }
+
+        // Initialize the app
+        function initApp() {
+            loadVehicle();
+            loadPreviousCharges();
+            updateStats();
+            checkPWAStatus();
+            setupEventListeners();
+            
+            // Register service worker for PWA functionality
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.register('sw.js')
+                    .then(registration => {
+                        console.log('SW registered: ', registration);
+                    })
+                    .catch(registrationError => {
+                        console.log('SW registration failed: ', registrationError);
+                    });
+            }
+            
+            // Listen for app installation prompt
+            window.addEventListener('beforeinstallprompt', (e) => {
+                // Prevent the mini-infobar from appearing on mobile
+                e.preventDefault();
+                // Stash the event so it can be triggered later
+                deferredPrompt = e;
+                // Update UI to notify the user they can install the PWA
+                showInstallPrompt();
+            });
+            
+            // Listen for app installation
+            window.addEventListener('appinstalled', (evt) => {
+                console.log('App was installed');
+                document.getElementById('pwaStatus').textContent = 'Installed';
+                hideInstallPrompt();
+            });
+        }
+
+        // Set up all event listeners
+        function setupEventListeners() {
+            // Tab buttons
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const tabName = this.getAttribute('data-tab');
+                    switchTab(tabName);
+                });
+            });
+            
+            // Session buttons
+            document.getElementById('newSessionButton').addEventListener('click', startNewChargeSession);
+            document.getElementById('floatingSessionButton').addEventListener('click', startNewChargeSession);
+            document.getElementById('addChargeButton').addEventListener('click', addChargeRow);
+            document.getElementById('finishSessionButton').addEventListener('click', finishSession);
+            
+            // Vehicle settings
+            document.getElementById('saveVehicleButton').addEventListener('click', saveVehicle);
+            
+            // Feedback
+            document.getElementById('feedbackButton').addEventListener('click', openFeedbackModal);
+            document.getElementById('closeFeedbackModal').addEventListener('click', closeFeedbackModal);
+            document.getElementById('submitFeedback').addEventListener('click', submitFeedback);
+            document.getElementById('cancelFeedback').addEventListener('click', closeFeedbackModal);
+            
+            // Added charge modal
+            document.getElementById('closeAddedChargeModal').addEventListener('click', closeAddedChargeModal);
+            document.getElementById('submitAddedCharge').addEventListener('click', submitAddedCharge);
+            document.getElementById('cancelAddedCharge').addEventListener('click', closeAddedChargeModal);
+            
+            // PWA installation
+            document.getElementById('installButton').addEventListener('click', installPWA);
+            document.getElementById('installPromptButton').addEventListener('click', installPWA);
+            document.getElementById('dismissInstallButton').addEventListener('click', dismissInstallPrompt);
+        }
+
+        // PWA Functions
+        function checkPWAStatus() {
+            if (window.matchMedia('(display-mode: standalone)').matches) {
+                document.getElementById('pwaStatus').textContent = 'Installed (Standalone)';
+            } else if (navigator.standalone) {
+                document.getElementById('pwaStatus').textContent = 'Installed (iOS)';
+            } else {
+                document.getElementById('pwaStatus').textContent = 'Not Installed';
+                
+                // Show install button if available
+                if (deferredPrompt) {
+                    document.getElementById('installButton').style.display = 'inline-flex';
+                }
+            }
+        }
+
+        function showInstallPrompt() {
+            document.getElementById('installPrompt').style.display = 'block';
+        }
+
+        function hideInstallPrompt() {
+            document.getElementById('installPrompt').style.display = 'none';
+        }
+
+        function dismissInstallPrompt() {
+            hideInstallPrompt();
+            // Optionally, you could set a cookie or localStorage to not show again for a period
+            localStorage.setItem('installPromptDismissed', Date.now());
+        }
+
+        async function installPWA() {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                const { outcome } = await deferredPrompt.userChoice;
+                if (outcome === 'accepted') {
+                    console.log('User accepted the install prompt');
+                    hideInstallPrompt();
+                    document.getElementById('pwaStatus').textContent = 'Installed';
+                    document.getElementById('installButton').style.display = 'none';
+                    showToast('App installed successfully!', 'success');
+                    localStorage.setItem('installPromptDismissed', Date.now());
+                    // Reload to apply standalone mode changes
+                    setTimeout(() => location.reload(), 1000);
+                } else {
+                    console.log('User dismissed the install prompt');
+                }
+                deferredPrompt = null;
+            }
+        }
+
+        // Vehicle functions
+        function saveVehicle() {
+            const vehicleName = document.getElementById('vehicleName').value;
+            const batteryCapacity = document.getElementById('vehicleBatteryCapacity').value;
+
+            if (!vehicleName || !batteryCapacity || batteryCapacity <= 0) {
+                showToast('Please enter valid vehicle details.', 'error');
+                return;
+            }
+
+            localStorage.setItem('vehicleName', vehicleName);
             localStorage.setItem('batteryCapacity', batteryCapacity);
-            alert("Battery capacity saved!");
-        } else {
-            alert("Please enter a valid battery capacity.");
-        }
-    }
-
-    let currentChargePercentage = 0;
-    let totalChargeAdded = 0;
-    let previousCharges = [];
-    let sessionStartCharge = 0;
-    let isSessionStarted = false;
-    let sessionStartTime = "";
-    const calibrationFactor = 50 / 58;
-
-    function loadBatteryCapacity() {
-        const savedCapacity = localStorage.getItem('batteryCapacity');
-        if (savedCapacity) {
-            document.getElementById('batteryCapacity').value = savedCapacity;
-        }
-    }
-
-    function loadPreviousCharges() {
-        const savedCharges = localStorage.getItem('previousCharges');
-        if (savedCharges) {
-            previousCharges = JSON.parse(savedCharges);
-            displayPreviousCharges();
-        }
-    }
-
-    function formatDateTime(date) {
-        const day = String(date.getDate()).padStart(2, '0');
-        const month = String(date.getMonth() + 1).padStart(2, '0');
-        const year = String(date.getFullYear()).slice(-2);
-        const hours = String(date.getHours()).padStart(2, '0');
-        const minutes = String(date.getMinutes()).padStart(2, '0');
-        return `${day}-${month}-${year} ${hours}:${minutes}`;
-    }
-
-    function addChargeRow() {
-        const batteryCapacity = parseFloat(localStorage.getItem('batteryCapacity'));
-        const startCharge = parseFloat(document.getElementById('startCharge').value);
-
-        if (!batteryCapacity || batteryCapacity <= 0) {
-            alert("Please save a valid battery capacity before proceeding.");
-            return;
+            loadVehicle();
+            showToast('Vehicle settings saved successfully!', 'success');
         }
 
-        if (!startCharge && startCharge !== 0) {
-            alert("Please enter the start-of-charge percentage.");
-            return;
+        function loadVehicle() {
+            const vehicleName = localStorage.getItem('vehicleName');
+            const batteryCapacity = localStorage.getItem('batteryCapacity');
+            
+            if (vehicleName) {
+                document.getElementById('vehicleNameDisplay').innerText = vehicleName;
+                document.getElementById('vehicleName').value = vehicleName;
+            }
+            
+            if (batteryCapacity) {
+                document.getElementById('vehicleBatteryCapacity').value = batteryCapacity;
+            }
         }
 
-        if (!isSessionStarted) {
+        // Charge session functions
+        function startNewChargeSession() {
+            const batteryCapacity = parseFloat(localStorage.getItem('batteryCapacity'));
+            if (!batteryCapacity || batteryCapacity <= 0) {
+                showToast('Please define a vehicle with a valid battery capacity first.', 'error');
+                switchTab('settings');
+                return;
+            }
+
+            const startCharge = parseFloat(prompt("Enter Starting Charge (%):"));
+            if (!startCharge || startCharge < 0 || startCharge > 100) {
+                showToast('Please enter a valid starting charge percentage (0-100).', 'error');
+                return;
+            }
+
             sessionStartCharge = startCharge;
             currentChargePercentage = startCharge;
             sessionStartTime = formatDateTime(new Date());
             isSessionStarted = true;
+            
+            // Update UI
+            document.getElementById('sessionStatus').classList.add('status-active');
+            document.getElementById('sessionStatus').querySelector('.status-text').innerText = "Session Active";
+            document.getElementById('startChargeDisplay').innerText = startCharge + "%";
+            document.getElementById('currentChargeDisplay').innerText = startCharge + "%";
+            document.getElementById('progressFill').style.width = startCharge + "%";
+            document.getElementById('addChargeButton').style.display = 'inline-flex';
+            document.getElementById('finishSessionButton').style.display = 'inline-flex';
+            
+            showToast('New charge session started!', 'success');
+            switchTab('current');
         }
 
-        const chargedAmount = parseFloat(prompt("Enter the total charge added (in kWh):"));
-        if (!chargedAmount || chargedAmount < 0) {
-            alert("Please enter a valid charged amount.");
-            return;
+        function addChargeRow() {
+            if (!isSessionStarted) {
+                showToast('Please start a charge session first.', 'error');
+                return;
+            }
+            document.getElementById('addedChargeModal').style.display = 'flex';
         }
 
-        const calibratedChargedAmount = chargedAmount * calibrationFactor;
-        totalChargeAdded = calibratedChargedAmount;
+        function submitAddedCharge() {
+            const totalCharged = parseFloat(document.getElementById('addedChargeInput').value);
+            if (!totalCharged || totalCharged < 0) {
+                showToast('Please enter a valid total charged amount.', 'error');
+                return;
+            }
 
-        const chargeAddedPercentage = (totalChargeAdded / batteryCapacity) * 100;
-        currentChargePercentage = Math.min(100, (sessionStartCharge + chargeAddedPercentage).toFixed(2));
+            const batteryCapacity = parseFloat(localStorage.getItem('batteryCapacity'));
+            const calibratedChargedAmount = totalCharged * calibrationFactor;
 
-        const tableBody = document.getElementById('chargeTableBody');
-        const newRow = document.createElement('tr');
+            const chargeAddedPercentage = (calibratedChargedAmount / batteryCapacity) * 100;
+            currentChargePercentage = Math.min(100, (sessionStartCharge + chargeAddedPercentage).toFixed(2));
 
-        const userChargeCell = document.createElement('td');
-        userChargeCell.innerText = chargedAmount.toFixed(2);
-        newRow.appendChild(userChargeCell);
+            const tableBody = document.getElementById('chargeTableBody');
+            const newRow = document.createElement('tr');
 
-        const calibratedChargeCell = document.createElement('td');
-        calibratedChargeCell.innerText = calibratedChargedAmount.toFixed(2);
-        newRow.appendChild(calibratedChargeCell);
+            const totalChargedCell = document.createElement('td');
+            totalChargedCell.innerText = totalCharged.toFixed(2);
+            newRow.appendChild(totalChargedCell);
 
-        const chargePercentCell = document.createElement('td');
-        chargePercentCell.innerText = currentChargePercentage + "%";
-        newRow.appendChild(chargePercentCell);
+            const calibratedChargeCell = document.createElement('td');
+            calibratedChargeCell.innerText = calibratedChargedAmount.toFixed(2);
+            newRow.appendChild(calibratedChargeCell);
 
-        tableBody.appendChild(newRow);
-    }
+            const chargePercentCell = document.createElement('td');
+            chargePercentCell.innerText = currentChargePercentage + "%";
+            newRow.appendChild(chargePercentCell);
 
-    function startNewSession() {
-        if (isSessionStarted) {
-            const sessionEndCharge = currentChargePercentage;
+            tableBody.appendChild(newRow);
+            
+            // Update progress
+            document.getElementById('currentChargeDisplay').innerText = currentChargePercentage + "%";
+            document.getElementById('progressFill').style.width = currentChargePercentage + "%";
+            
+            closeAddedChargeModal();
+            showToast('Charge data added successfully!', 'success');
+        }
+
+        function closeAddedChargeModal() {
+            document.getElementById('addedChargeModal').style.display = 'none';
+            document.getElementById('addedChargeInput').value = '';
+        }
+
+        function finishSession() {
+            if (!isSessionStarted) {
+                showToast('No active session to finish.', 'error');
+                return;
+            }
+
             const sessionEndTime = formatDateTime(new Date());
+            const sessionEndCharge = currentChargePercentage;
+
             const newSession = {
                 startTime: sessionStartTime,
                 endTime: sessionEndTime,
@@ -324,58 +959,150 @@
             previousCharges.push(newSession);
             localStorage.setItem('previousCharges', JSON.stringify(previousCharges));
 
+            // Reset session
             document.getElementById('chargeTableBody').innerHTML = '';
-            sessionStartCharge = 0;
-            currentChargePercentage = 0;
+            document.getElementById('sessionStatus').classList.remove('status-active');
+            document.getElementById('sessionStatus').querySelector('.status-text').innerText = "No Active Session";
+            document.getElementById('startChargeDisplay').innerText = "0%";
+            document.getElementById('currentChargeDisplay').innerText = "0%";
+            document.getElementById('progressFill').style.width = "0%";
+            document.getElementById('addChargeButton').style.display = 'none';
+            document.getElementById('finishSessionButton').style.display = 'none';
             isSessionStarted = false;
 
-            alert("Charge session saved!");
+            showToast('Charge session saved to history!', 'success');
             displayPreviousCharges();
-        } else {
-            alert("Please start a charge session first.");
+            updateStats();
         }
-    }
 
-    function displayPreviousCharges() {
-        const previousChargesList = document.getElementById('previousChargesList');
-        previousChargesList.innerHTML = '';
+        // Previous charges functions
+        function loadPreviousCharges() {
+            const savedCharges = localStorage.getItem('previousCharges');
+            if (savedCharges) {
+                previousCharges = JSON.parse(savedCharges);
+                displayPreviousCharges();
+            }
+        }
 
-        previousCharges.forEach((session, index) => {
-            const row = document.createElement('tr');
+        function displayPreviousCharges() {
+            const previousChargesList = document.getElementById('previousChargesList');
+            previousChargesList.innerHTML = '';
 
-            const startTimeCell = document.createElement('td');
-            startTimeCell.innerText = session.startTime;
-            row.appendChild(startTimeCell);
+            previousCharges.forEach((session, index) => {
+                const row = document.createElement('tr');
 
-            const endTimeCell = document.createElement('td');
-            endTimeCell.innerText = session.endTime;
-            row.appendChild(endTimeCell);
+                const startTimeCell = document.createElement('td');
+                startTimeCell.innerText = session.startTime;
+                row.appendChild(startTimeCell);
 
-            const startChargeCell = document.createElement('td');
-            startChargeCell.innerText = session.startCharge + "%";
-            row.appendChild(startChargeCell);
+                const endTimeCell = document.createElement('td');
+                endTimeCell.innerText = session.endTime;
+                row.appendChild(endTimeCell);
 
-            const endChargeCell = document.createElement('td');
-            endChargeCell.innerText = session.endCharge + "%";
-            row.appendChild(endChargeCell);
+                const startChargeCell = document.createElement('td');
+                startChargeCell.innerText = session.startCharge + "%";
+                row.appendChild(startChargeCell);
 
-            const deleteButtonCell = document.createElement('td');
-            const deleteButton = document.createElement('button');
-            deleteButton.innerText = 'X';
-            deleteButton.onclick = () => deleteSession(index);
-            deleteButtonCell.appendChild(deleteButton);
-            row.appendChild(deleteButtonCell);
+                const endChargeCell = document.createElement('td');
+                endChargeCell.innerText = session.endCharge + "%";
+                row.appendChild(endChargeCell);
 
-            previousChargesList.appendChild(row);
-        });
-    }
+                const deleteButtonCell = document.createElement('td');
+                const deleteButton = document.createElement('button');
+                deleteButton.innerText = 'Delete';
+                deleteButton.className = 'btn btn-danger';
+                deleteButton.addEventListener('click', () => deleteSession(index));
+                deleteButtonCell.appendChild(deleteButton);
+                row.appendChild(deleteButtonCell);
 
-    function deleteSession(index) {
-        previousCharges.splice(index, 1);
-        localStorage.setItem('previousCharges', JSON.stringify(previousCharges));
-        displayPreviousCharges();
-    }
-</script>
+                previousChargesList.appendChild(row);
+            });
+        }
 
+        function deleteSession(index) {
+            if (confirm('Are you sure you want to delete this session?')) {
+                previousCharges.splice(index, 1);
+                localStorage.setItem('previousCharges', JSON.stringify(previousCharges));
+                displayPreviousCharges();
+                updateStats();
+                showToast('Session deleted successfully!', 'success');
+            }
+        }
+
+        function updateStats() {
+            document.getElementById('totalSessions').innerText = previousCharges.length;
+            
+            if (previousCharges.length > 0) {
+                const totalCharge = previousCharges.reduce((sum, session) => {
+                    return sum + (session.endCharge - session.startCharge);
+                }, 0);
+                const batteryCapacity = parseFloat(localStorage.getItem('batteryCapacity') || 0);
+                const avgChargePercentage = totalCharge / previousCharges.length;
+                const avgChargeKwh = (avgChargePercentage / 100) * batteryCapacity;
+                
+                document.getElementById('avgChargeAdded').innerText = avgChargeKwh.toFixed(1) + " kWh";
+            } else {
+                document.getElementById('avgChargeAdded').innerText = "0 kWh";
+            }
+        }
+
+        // Feedback functions
+        function openFeedbackModal() {
+            document.getElementById('feedbackModal').style.display = 'flex';
+        }
+
+        function closeFeedbackModal() {
+            document.getElementById('feedbackModal').style.display = 'none';
+            document.getElementById('feedbackInput').value = '';
+        }
+
+        function submitFeedback() {
+            const feedback = document.getElementById('feedbackInput').value;
+            if (!feedback) {
+                showToast('Please enter your feedback before submitting.', 'error');
+                return;
+            }
+
+            // In a real app, you would send this to a server
+            // For now, we'll just show a success message
+            showToast('Thank you for your feedback! We appreciate your input.', 'success');
+            closeFeedbackModal();
+        }
+
+        // Utility functions
+        function formatDateTime(date) {
+            const day = String(date.getDate()).padStart(2, '0');
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const year = String(date.getFullYear()).slice(-2);
+            const hours = String(date.getHours()).padStart(2, '0');
+            const minutes = String(date.getMinutes()).padStart(2, '0');
+            return `${day}-${month}-${year} ${hours}:${minutes}`;
+        }
+
+        function showToast(message, type = 'info') {
+            const toastContainer = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            
+            let icon = 'ℹ️';
+            if (type === 'success') icon = '✅';
+            if (type === 'error') icon = '❌';
+            
+            toast.innerHTML = `
+                <span>${icon}</span>
+                <span>${message}</span>
+            `;
+            
+            toastContainer.appendChild(toast);
+            
+            // Remove toast after 5 seconds
+            setTimeout(() => {
+                toast.remove();
+            }, 5000);
+        }
+
+        // Initialize the app when DOM is loaded
+        document.addEventListener('DOMContentLoaded', initApp);
+    </script>
 </body>
 </html>
