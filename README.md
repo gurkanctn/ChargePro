@@ -8,7 +8,7 @@ Several charging service providers allow you to view "only their" service histor
 
 Here's the draft interface:
 
-![image](https://github.com/user-attachments/assets/e3766d0d-a237-435e-9f36-be5cd3115b14)
+<img width="495" height="769" alt="image" src="https://github.com/user-attachments/assets/773b21f2-7e72-4ba6-ac2c-9128b655113e" />
 
 And here's the description (as suggested by **Gemini**):
 
@@ -28,3 +28,4 @@ Analyze Charging Patterns: Gain insights into your charging habits and identify 
 Stay Organized: Keep your charging data well-organized and accessible whenever you need it.
 
 Experience the convenience of Charge Pro today. Download now and take control of your EV charging journey.
+
